@@ -2924,6 +2924,29 @@
 <span id="2924">2924</span>
 <span id="2925">2925</span>
 <span id="2926">2926</span>
+<span id="2927">2927</span>
+<span id="2928">2928</span>
+<span id="2929">2929</span>
+<span id="2930">2930</span>
+<span id="2931">2931</span>
+<span id="2932">2932</span>
+<span id="2933">2933</span>
+<span id="2934">2934</span>
+<span id="2935">2935</span>
+<span id="2936">2936</span>
+<span id="2937">2937</span>
+<span id="2938">2938</span>
+<span id="2939">2939</span>
+<span id="2940">2940</span>
+<span id="2941">2941</span>
+<span id="2942">2942</span>
+<span id="2943">2943</span>
+<span id="2944">2944</span>
+<span id="2945">2945</span>
+<span id="2946">2946</span>
+<span id="2947">2947</span>
+<span id="2948">2948</span>
+<span id="2949">2949</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::pedantic</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::cargo</span>)]</span>
@@ -4174,6 +4197,29 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shrink_to_fit</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">buf</span>.<span class="ident">shrink_to_fit</span>();
+    }
+
+    <span class="doccomment">/// Shrinks the capacity of the vector with a lower bound.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The capacity will remain at least as large as both the length and the</span>
+    <span class="doccomment">/// supplied value.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the current capacity is less than the lower limit, this is a no-op.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use spinoso_string::String;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let mut s = String::with_capacity(10);</span>
+    <span class="doccomment">/// s.extend_from_slice(b&quot;abc&quot;);</span>
+    <span class="doccomment">/// assert_eq!(s.capacity(), 10);</span>
+    <span class="doccomment">/// s.shrink_to(5);</span>
+    <span class="doccomment">/// assert!(s.capacity() &gt;= 5);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shrink_to</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">min_capacity</span>: <span class="ident">usize</span>) {
+        <span class="self">self</span>.<span class="ident">buf</span>.<span class="ident">shrink_to</span>(<span class="ident">min_capacity</span>);
     }
 }
 
