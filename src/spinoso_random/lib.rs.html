@@ -530,6 +530,7 @@
 <span id="530">530</span>
 <span id="531">531</span>
 <span id="532">532</span>
+<span id="533">533</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::pedantic</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::cargo</span>)]</span>
@@ -639,11 +640,12 @@
 <span class="kw">mod</span> <span class="ident">random</span>;
 <span class="kw">mod</span> <span class="ident">urandom</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;random-rand&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::rand</span>::{<span class="ident">rand</span>, <span class="ident">Max</span>, <span class="ident">Rand</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">random::ruby::Mt</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">random</span>::{<span class="ident">new_seed</span>, <span class="ident">seed_to_key</span>, <span class="ident">Random</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">urandom::urandom</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;random-rand&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::rand</span>::{<span class="ident">rand</span>, <span class="ident">Max</span>, <span class="ident">Rand</span>};
 
 <span class="doccomment">/// Sum type of all errors possibly returned from `Random` functions.</span>
 <span class="doccomment">///</span>

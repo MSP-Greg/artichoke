@@ -1183,6 +1183,7 @@
 <span id="1183">1183</span>
 <span id="1184">1184</span>
 <span id="1185">1185</span>
+<span id="1186">1186</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Parser for classifying byte strings as Ruby identifiers.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This module exposes a parser for determining if a sequence of bytes is a</span>
@@ -1233,9 +1234,10 @@
 <span class="doccomment">//! assert_eq!(&quot;spinoso_symbol=&quot;.parse::&lt;IdentifierType&gt;(), Ok(IdentifierType::AttrSet));</span>
 <span class="doccomment">//! ```</span>
 
-<span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
 <span class="kw">use</span> <span class="ident">core::fmt</span>;
 <span class="kw">use</span> <span class="ident">core::str::FromStr</span>;
+
+<span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
 
 <span class="doccomment">/// Valid types for Ruby identifiers.</span>
 <span class="doccomment">///</span>

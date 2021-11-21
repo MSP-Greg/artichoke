@@ -293,6 +293,8 @@
 <span id="293">293</span>
 <span id="294">294</span>
 <span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Artichoke CLI entry point.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Artichoke&#39;s version of the `ruby` CLI. This module is exported as the</span>
@@ -303,6 +305,7 @@
 <span class="kw">use</span> <span class="ident">std::fs</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 <span class="kw">use</span> <span class="ident">std::path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>};
+
 <span class="kw">use</span> <span class="ident">termcolor::WriteColor</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::backend::platform_string::os_str_to_bytes</span>;
@@ -528,6 +531,7 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">std::ffi::OsString</span>;
     <span class="kw">use</span> <span class="ident">std::path::PathBuf</span>;
+
     <span class="kw">use</span> <span class="ident">termcolor::Ansi</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">run</span>, <span class="ident">Args</span>};

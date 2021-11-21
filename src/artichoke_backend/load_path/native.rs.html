@@ -98,12 +98,14 @@
 <span id="98"> 98</span>
 <span id="99"> 99</span>
 <span id="100">100</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bstr</span>::{<span class="ident">BString</span>, <span class="ident">ByteSlice</span>};
-<span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
+<span id="101">101</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
 <span class="kw">use</span> <span class="ident">std::env</span>;
 <span class="kw">use</span> <span class="ident">std::fs</span>::{<span class="self">self</span>, <span class="ident">File</span>};
 <span class="kw">use</span> <span class="ident">std::io</span>;
 <span class="kw">use</span> <span class="ident">std::path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>};
+
+<span class="kw">use</span> <span class="ident">bstr</span>::{<span class="ident">BString</span>, <span class="ident">ByteSlice</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">absolutize_relative_to</span>, <span class="ident">normalize_slashes</span>};
 

@@ -595,12 +595,14 @@
 <span id="595">595</span>
 <span id="596">596</span>
 <span id="597">597</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
-<span class="kw">use</span> <span class="ident">std::error</span>;
+<span id="598">598</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::error</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::iter::Iterator</span>;
 <span class="kw">use</span> <span class="ident">std::num::NonZeroU32</span>;
 <span class="kw">use</span> <span class="ident">std::str</span>::{<span class="self">self</span>, <span class="ident">FromStr</span>};
+
+<span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert</span>::{<span class="ident">implicitly_convert_to_int</span>, <span class="ident">implicitly_convert_to_string</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::extn::prelude</span>::<span class="kw-2">*</span>;

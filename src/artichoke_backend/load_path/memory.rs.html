@@ -484,13 +484,14 @@
 <span id="484">484</span>
 <span id="485">485</span>
 <span id="486">486</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bstr</span>::{<span class="ident">BString</span>, <span class="ident">ByteSlice</span>};
-<span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::collections::hash_map::Entry</span> <span class="kw">as</span> <span class="ident">HashEntry</span>;
 <span class="kw">use</span> <span class="ident">std::collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>};
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 <span class="kw">use</span> <span class="ident">std::path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>};
+
+<span class="kw">use</span> <span class="ident">bstr</span>::{<span class="ident">BString</span>, <span class="ident">ByteSlice</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">absolutize_relative_to</span>, <span class="ident">normalize_slashes</span>, <span class="ident">ExtensionHook</span>, <span class="ident">RUBY_LOAD_PATH</span>};
 
@@ -949,9 +950,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test::prelude</span>::<span class="kw-2">*</span>;
-
     <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Extension</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test::prelude</span>::<span class="kw-2">*</span>;
 
     <span class="kw">struct</span> <span class="ident">TestFile</span>;
 

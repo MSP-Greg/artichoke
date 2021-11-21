@@ -314,20 +314,16 @@
 <span id="314">314</span>
 <span id="315">315</span>
 <span id="316">316</span>
-<span id="317">317</span>
-<span id="318">318</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 <span class="kw">use</span> <span class="ident">std::path::Path</span>;
 
-<span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
-
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;load-path-rubylib-native-file-system-loader&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">artichoke_load_path::Rubylib</span>;
-
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::platform_string::os_string_to_bytes</span>;
+<span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ExtensionHook</span>, <span class="ident">Memory</span>, <span class="ident">Native</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::platform_string::os_string_to_bytes</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Hybrid</span> {

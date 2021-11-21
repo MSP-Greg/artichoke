@@ -163,7 +163,6 @@
 <span id="163">163</span>
 <span id="164">164</span>
 <span id="165">165</span>
-<span id="166">166</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">alloc::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">alloc::boxed::Box</span>;
 <span class="kw">use</span> <span class="ident">alloc::rc::Rc</span>;
@@ -173,10 +172,9 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;small-array&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">smallvec::SmallVec</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::array::vec::Array</span>;
-
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;small-array&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::array::smallvec::SmallArray</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::array::vec::Array</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;small-array&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::array::INLINE_CAPACITY</span>;
 

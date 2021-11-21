@@ -618,13 +618,15 @@
 <span id="618">618</span>
 <span id="619">619</span>
 <span id="620">620</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">artichoke_core::convert</span>::{<span class="ident">Convert</span>, <span class="ident">ConvertMut</span>, <span class="ident">TryConvert</span>, <span class="ident">TryConvertMut</span>};
-<span class="kw">use</span> <span class="ident">artichoke_core::intern::Intern</span>;
-<span class="kw">use</span> <span class="ident">artichoke_core::value::Value</span> <span class="kw">as</span> <span class="ident">ValueCore</span>;
-<span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
+<span id="621">621</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::error</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::ptr</span>;
+
+<span class="kw">use</span> <span class="ident">artichoke_core::convert</span>::{<span class="ident">Convert</span>, <span class="ident">ConvertMut</span>, <span class="ident">TryConvert</span>, <span class="ident">TryConvertMut</span>};
+<span class="kw">use</span> <span class="ident">artichoke_core::intern::Intern</span>;
+<span class="kw">use</span> <span class="ident">artichoke_core::value::Value</span> <span class="kw">as</span> <span class="ident">ValueCore</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert::BoxUnboxVmValue</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::core::ClassRegistry</span>;

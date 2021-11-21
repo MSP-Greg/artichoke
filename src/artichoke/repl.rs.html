@@ -284,17 +284,19 @@
 <span id="284">284</span>
 <span id="285">285</span>
 <span id="286">286</span>
+<span id="287">287</span>
 </pre><pre class="rust"><code><span class="doccomment">//! A REPL (read–eval–print–loop) for an Artichoke interpreter.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The REPL is readline enabled, but does not save history. The REPL supports</span>
 <span class="doccomment">//! multi-line Ruby expressions, CTRL-C to break out of an expression, and can</span>
 <span class="doccomment">//! inspect return values and exception backtraces.</span>
 
-<span class="kw">use</span> <span class="ident">rustyline::error::ReadlineError</span>;
-<span class="kw">use</span> <span class="ident">rustyline::Editor</span>;
 <span class="kw">use</span> <span class="ident">std::error</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
+
+<span class="kw">use</span> <span class="ident">rustyline::error::ReadlineError</span>;
+<span class="kw">use</span> <span class="ident">rustyline::Editor</span>;
 <span class="kw">use</span> <span class="ident">termcolor::WriteColor</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::backend::state::parser::Context</span>;

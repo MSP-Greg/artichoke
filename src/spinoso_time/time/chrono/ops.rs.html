@@ -520,11 +520,14 @@
 <span id="520">520</span>
 <span id="521">521</span>
 <span id="522">522</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">chrono::prelude</span>::<span class="kw-2">*</span>;
+<span id="523">523</span>
+<span id="524">524</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">core::ops</span>::{<span class="ident">Add</span>, <span class="ident">Sub</span>};
+<span class="kw">use</span> <span class="ident">std::time</span>;
+
+<span class="kw">use</span> <span class="ident">chrono::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">chrono::Duration</span>;
 <span class="kw">use</span> <span class="ident">chrono_tz::Tz</span>;
-<span class="kw">use</span> <span class="ident">core::ops</span>::{<span class="ident">Add</span>, <span class="ident">Sub</span>};
-<span class="kw">use</span> <span class="ident">std::time</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::time::chrono</span>::{<span class="ident">Offset</span>, <span class="ident">Time</span>};
 
@@ -843,8 +846,9 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Time</span>;
     <span class="kw">use</span> <span class="ident">chrono::prelude</span>::<span class="kw-2">*</span>;
+
+    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Time</span>;
 
     <span class="kw">fn</span> <span class="ident">datetime</span>() -&gt; <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">Utc</span><span class="op">&gt;</span> {
         <span class="comment">// halfway through a second</span>

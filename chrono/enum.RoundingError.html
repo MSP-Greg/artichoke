@@ -4,7 +4,7 @@
     TimestampExceedsLimit,
 }</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>An error from rounding by <code>Duration</code></p>
 <p>See: <a href="trait.DurationRound.html" title="DurationRound"><code>DurationRound</code></a></p>
-</div></details><h2 id="variants" class="variants small-section-header">Variants<a href="#variants" class="anchor"></a></h2><div id="variant.DurationExceedsTimestamp" class="variant small-section-header"><a href="#variant.DurationExceedsTimestamp" class="anchor field"></a><code>DurationExceedsTimestamp</code></div><div class="docblock"><p>Error when the Duration exceeds the Duration from or until the Unix epoch.</p>
+</div></details><h2 id="variants" class="variants small-section-header">Variants<a href="#variants" class="anchor"></a></h2><h3 id="variant.DurationExceedsTimestamp" class="variant small-section-header"><a href="#variant.DurationExceedsTimestamp" class="anchor field"></a><code>DurationExceedsTimestamp</code></h3><div class="docblock"><p>Error when the Duration exceeds the Duration from or until the Unix epoch.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">dt</span> <span class="op">=</span> <span class="ident">Utc</span>.<span class="ident">ymd</span>(<span class="number">1970</span>, <span class="number">12</span>, <span class="number">12</span>).<span class="ident">and_hms</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);
 
@@ -12,7 +12,7 @@
     <span class="ident">dt</span>.<span class="ident">duration_round</span>(<span class="ident">Duration::days</span>(<span class="number">365</span>)),
     <span class="prelude-val">Err</span>(<span class="ident">RoundingError::DurationExceedsTimestamp</span>),
 );</code></pre></div>
-</div><div id="variant.DurationExceedsLimit" class="variant small-section-header"><a href="#variant.DurationExceedsLimit" class="anchor field"></a><code>DurationExceedsLimit</code></div><div class="docblock"><p>Error when <code>Duration.num_nanoseconds</code> exceeds the limit.</p>
+</div><h3 id="variant.DurationExceedsLimit" class="variant small-section-header"><a href="#variant.DurationExceedsLimit" class="anchor field"></a><code>DurationExceedsLimit</code></h3><div class="docblock"><p>Error when <code>Duration.num_nanoseconds</code> exceeds the limit.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">dt</span> <span class="op">=</span> <span class="ident">Utc</span>.<span class="ident">ymd</span>(<span class="number">2260</span>, <span class="number">12</span>, <span class="number">31</span>).<span class="ident">and_hms_nano</span>(<span class="number">23</span>, <span class="number">59</span>, <span class="number">59</span>, <span class="number">1_75_500_000</span>);
 
@@ -20,7 +20,7 @@
     <span class="ident">dt</span>.<span class="ident">duration_round</span>(<span class="ident">Duration::days</span>(<span class="number">300</span> <span class="op">*</span> <span class="number">365</span>)),
     <span class="prelude-val">Err</span>(<span class="ident">RoundingError::DurationExceedsLimit</span>)
 );</code></pre></div>
-</div><div id="variant.TimestampExceedsLimit" class="variant small-section-header"><a href="#variant.TimestampExceedsLimit" class="anchor field"></a><code>TimestampExceedsLimit</code></div><div class="docblock"><p>Error when <code>DateTime.timestamp_nanos</code> exceeds the limit.</p>
+</div><h3 id="variant.TimestampExceedsLimit" class="variant small-section-header"><a href="#variant.TimestampExceedsLimit" class="anchor field"></a><code>TimestampExceedsLimit</code></h3><div class="docblock"><p>Error when <code>DateTime.timestamp_nanos</code> exceeds the limit.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">dt</span> <span class="op">=</span> <span class="ident">Utc</span>.<span class="ident">ymd</span>(<span class="number">2300</span>, <span class="number">12</span>, <span class="number">12</span>).<span class="ident">and_hms</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);
 

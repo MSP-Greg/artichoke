@@ -83,6 +83,7 @@
 <span id="83">83</span>
 <span id="84">84</span>
 <span id="85">85</span>
+<span id="86">86</span>
 </pre><pre class="rust"><code><span class="doccomment">//! ENV is a hash-like accessor for environment variables.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This module implements the [`ENV`] singleton object from Ruby Core.</span>
@@ -103,9 +104,10 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [`ENV`]: https://ruby-doc.org/core-2.6.3/ENV.html</span>
 
-<span class="kw">use</span> <span class="ident">spinoso_env</span>::{<span class="ident">ArgumentError</span> <span class="kw">as</span> <span class="ident">EnvArgumentError</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">EnvError</span>, <span class="ident">InvalidError</span>};
 <span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
+
+<span class="kw">use</span> <span class="ident">spinoso_env</span>::{<span class="ident">ArgumentError</span> <span class="kw">as</span> <span class="ident">EnvArgumentError</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">EnvError</span>, <span class="ident">InvalidError</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::extn::prelude</span>::<span class="kw-2">*</span>;
 

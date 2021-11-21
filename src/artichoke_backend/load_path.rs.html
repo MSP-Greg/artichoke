@@ -259,6 +259,7 @@
 <span id="259">259</span>
 <span id="260">260</span>
 <span id="261">261</span>
+<span id="262">262</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Virtual file system.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Artichoke proxies all file system access through a virtual file system. The</span>
@@ -273,8 +274,9 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [extension hooks]: ExtensionHook</span>
 
-<span class="kw">use</span> <span class="ident">bstr::ByteVec</span>;
 <span class="kw">use</span> <span class="ident">std::path</span>::{<span class="ident">Component</span>, <span class="ident">Path</span>, <span class="ident">PathBuf</span>};
+
+<span class="kw">use</span> <span class="ident">bstr::ByteVec</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Error</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::platform_string::ConvertBytesError</span>;

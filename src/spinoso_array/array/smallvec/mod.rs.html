@@ -1756,12 +1756,14 @@
 <span id="1756">1756</span>
 <span id="1757">1757</span>
 <span id="1758">1758</span>
+<span id="1759">1759</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Ruby `Array` based on [`SmallVec`].</span>
 
 <span class="kw">use</span> <span class="ident">alloc::boxed::Box</span>;
 <span class="kw">use</span> <span class="ident">alloc::vec::Vec</span>;
 <span class="kw">use</span> <span class="ident">core::cmp</span>;
 <span class="kw">use</span> <span class="ident">core::slice</span>::{<span class="ident">Iter</span>, <span class="ident">IterMut</span>};
+
 <span class="kw">use</span> <span class="ident">smallvec::SmallVec</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::array::INLINE_CAPACITY</span>;
