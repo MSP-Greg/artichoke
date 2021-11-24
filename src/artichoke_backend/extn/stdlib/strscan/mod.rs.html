@@ -31,16 +31,6 @@
 <span id="30">30</span>
 <span id="31">31</span>
 <span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::ffi::CStr</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::extn::prelude</span>::<span class="kw-2">*</span>;
@@ -59,8 +49,6 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
-
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test::prelude</span>::<span class="kw-2">*</span>;
 
     <span class="kw">const</span> <span class="ident">SUBJECT</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;StringScanner&quot;</span>;
@@ -69,18 +57,10 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">functional</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">interp</span> <span class="op">=</span> <span class="ident">interpreter</span>().<span class="ident">unwrap</span>();
-        <span class="ident">interp</span>.<span class="ident">eval</span>(<span class="ident">FUNCTIONAL_TEST</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">interp</span>.<span class="ident">eval</span>(<span class="ident">FUNCTIONAL_TEST</span>);
+        <span class="ident">unwrap_or_panic_with_backtrace</span>(<span class="kw-2">&amp;mut</span> <span class="ident">interp</span>, <span class="ident">SUBJECT</span>, <span class="ident">result</span>);
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">interp</span>.<span class="ident">eval</span>(<span class="string">b&quot;spec&quot;</span>);
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">exc</span>) <span class="op">=</span> <span class="ident">result</span> {
-            <span class="kw">let</span> <span class="ident">backtrace</span> <span class="op">=</span> <span class="ident">exc</span>.<span class="ident">vm_backtrace</span>(<span class="kw-2">&amp;mut</span> <span class="ident">interp</span>);
-            <span class="kw">let</span> <span class="ident">backtrace</span> <span class="op">=</span> <span class="ident">bstr::join</span>(<span class="string">&quot;\n&quot;</span>, <span class="ident">backtrace</span>.<span class="ident">unwrap_or_default</span>());
-            <span class="macro">panic!</span>(
-                <span class="string">&quot;{} tests failed with message: {:?} and backtrace:\n{:?}&quot;</span>,
-                <span class="ident">SUBJECT</span>,
-                <span class="ident">exc</span>.<span class="ident">message</span>().<span class="ident">as_bstr</span>(),
-                <span class="ident">backtrace</span>.<span class="ident">as_bstr</span>()
-            );
-        }
+        <span class="ident">unwrap_or_panic_with_backtrace</span>(<span class="kw-2">&amp;mut</span> <span class="ident">interp</span>, <span class="ident">SUBJECT</span>, <span class="ident">result</span>);
     }
 }
 </code></pre></div>
