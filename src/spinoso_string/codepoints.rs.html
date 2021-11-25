@@ -267,7 +267,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use spinoso_string::{CodepointsError, String};</span>
-<span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+<span class="doccomment">/// # fn example() -&gt; Result&lt;(), CodepointsError&gt; {</span>
 <span class="doccomment">/// let s = String::from(&quot;hello&quot;);</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// assert_eq!(s.codepoints()?.collect::&lt;Vec&lt;_&gt;&gt;(), [104, 101, 108, 108, 111]);</span>
@@ -287,7 +287,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use spinoso_string::String;</span>
-<span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+<span class="doccomment">/// # fn example() -&gt; Result&lt;(), spinoso_string::CodepointsError&gt; {</span>
 <span class="doccomment">/// let s = String::from(&quot;💎&quot;);</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// assert_eq!(s.codepoints()?.collect::&lt;Vec&lt;_&gt;&gt;(), [u32::from(&#39;💎&#39;)]);</span>

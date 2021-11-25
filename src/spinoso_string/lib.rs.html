@@ -3441,7 +3441,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use spinoso_string::String;</span>
-<span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+<span class="doccomment">/// # fn example() -&gt; Result&lt;(), spinoso_string::CenterError&gt; {</span>
 <span class="doccomment">/// let s = String::from(&quot;hello&quot;);</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// assert_eq!(s.center(4, None)?.collect::&lt;Vec&lt;_&gt;&gt;(), b&quot;hello&quot;);</span>
@@ -3457,7 +3457,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use spinoso_string::String;</span>
-<span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+<span class="doccomment">/// # fn example() -&gt; Result&lt;(), spinoso_string::CenterError&gt; {</span>
 <span class="doccomment">/// let s = String::from(&quot;💎&quot;);</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// assert_eq!(s.center(3, None)?.collect::&lt;Vec&lt;_&gt;&gt;(), &quot; 💎 &quot;.as_bytes());</span>
@@ -4976,7 +4976,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use spinoso_string::String;</span>
-    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), spinoso_string::CenterError&gt; {</span>
     <span class="doccomment">/// let s = String::from(&quot;hello&quot;);</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(s.center(4, None)?.collect::&lt;Vec&lt;_&gt;&gt;(), b&quot;hello&quot;);</span>
@@ -4992,7 +4992,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use spinoso_string::String;</span>
-    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), spinoso_string::CenterError&gt; {</span>
     <span class="doccomment">/// let s = String::from(&quot;💎&quot;);</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(s.center(3, None)?.collect::&lt;Vec&lt;_&gt;&gt;(), &quot; 💎 &quot;.as_bytes());</span>
@@ -5381,7 +5381,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use spinoso_string::{CodepointsError, String};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), spinoso_string::CodepointsError&gt; {</span>
     <span class="doccomment">/// let s = String::utf8(b&quot;ab\xF0\x9F\x92\x8E\xFF&quot;.to_vec());</span>
     <span class="doccomment">/// assert!(matches!(s.codepoints(), Err(CodepointsError::InvalidUtf8Codepoint)));</span>
     <span class="doccomment">///</span>
@@ -5399,7 +5399,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use spinoso_string::String;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), spinoso_string::CodepointsError&gt; {</span>
     <span class="doccomment">/// let s = String::binary(&quot;💎&quot;.as_bytes().to_vec());</span>
     <span class="doccomment">/// let mut codepoints = s.codepoints()?;</span>
     <span class="doccomment">/// assert_eq!(codepoints.next(), Some(0xF0));</span>
