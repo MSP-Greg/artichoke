@@ -100,13 +100,19 @@
 <span id="99"> 99</span>
 <span id="100">100</span>
 <span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Generator for Version 4 UUIDs.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! See [RFC 4122], Section 4.4.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [RFC 4122]: https://tools.ietf.org/html/rfc4122#section-4.4</span>
 
-<span class="kw">use</span> <span class="ident">rand::RngCore</span>;
+<span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">CryptoRng</span>, <span class="ident">RngCore</span>};
 <span class="kw">use</span> <span class="ident">scolapasta_hex</span> <span class="kw">as</span> <span class="ident">hex</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::RandomBytesError</span>;
@@ -126,10 +132,16 @@
 
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">v4</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">RandomBytesError</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> [<span class="number">0</span>; <span class="ident">OCTETS</span>];
-    <span class="kw">if</span> <span class="ident">rand::thread_rng</span>().<span class="ident">try_fill_bytes</span>(<span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>).<span class="ident">is_err</span>() {
-        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RandomBytesError::new</span>());
+    <span class="kw">fn</span> <span class="ident">get_random_bytes</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">RngCore</span> <span class="op">+</span> <span class="ident">CryptoRng</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">rng</span>: <span class="ident">T</span>, <span class="ident">slice</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RandomBytesError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">rng</span>.<span class="ident">try_fill_bytes</span>(<span class="ident">slice</span>).<span class="ident">is_err</span>() {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RandomBytesError::new</span>());
+        }
+        <span class="prelude-val">Ok</span>(())
     }
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> [<span class="number">0</span>; <span class="ident">OCTETS</span>];
+    <span class="ident">get_random_bytes</span>(<span class="ident">rand::thread_rng</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>)<span class="question-mark">?</span>;
+
     <span class="comment">// Per RFC 4122, Section 4.4, set bits for version and `clock_seq_hi_and_reserved`.</span>
     <span class="ident">bytes</span>[<span class="number">6</span>] <span class="op">=</span> (<span class="ident">bytes</span>[<span class="number">6</span>] <span class="op">&amp;</span> <span class="number">0x0f</span>) <span class="op">|</span> <span class="number">0x40</span>;
     <span class="ident">bytes</span>[<span class="number">8</span>] <span class="op">=</span> (<span class="ident">bytes</span>[<span class="number">8</span>] <span class="op">&amp;</span> <span class="number">0x3f</span>) <span class="op">|</span> <span class="number">0x80</span>;

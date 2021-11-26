@@ -73,7 +73,7 @@ checked:</p>
 (at least, it’s highly likely to be incorrect if it wasn’t).</li>
 <li><code>T</code> needs to have the same size and alignment as what <code>ptr</code> was allocated with.
 (<code>T</code> having a less strict alignment is not sufficient, the alignment really
-needs to be equal to satisfy the <a href="https://doc.rust-lang.org/nightly/core/alloc/global/trait.GlobalAlloc.html#tymethod.dealloc"><code>dealloc</code></a> requirement that memory must be
+needs to be equal to satisfy the <a href="alloc::alloc::GlobalAlloc::dealloc"><code>dealloc</code></a> requirement that memory must be
 allocated and deallocated with the same layout.)</li>
 <li><code>length</code> needs to be less than or equal to <code>capacity</code>.</li>
 <li><code>capacity</code> needs to be the capacity that the pointer was allocated with.</li>
