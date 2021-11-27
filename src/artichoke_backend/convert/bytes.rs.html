@@ -251,29 +251,16 @@
 <span id="250">250</span>
 <span id="251">251</span>
 <span id="252">252</span>
-<span id="253">253</span>
-<span id="254">254</span>
-<span id="255">255</span>
-<span id="256">256</span>
-<span id="257">257</span>
-<span id="258">258</span>
-<span id="259">259</span>
-<span id="260">260</span>
-<span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
-<span id="264">264</span>
-<span id="265">265</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">core::mem</span>;
+<span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::ffi</span>::{<span class="ident">OsStr</span>, <span class="ident">OsString</span>};
-<span class="kw">use</span> <span class="ident">std::slice</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert::UnboxRubyError</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::core</span>::{<span class="ident">TryConvertMut</span>, <span class="ident">Value</span> <span class="kw">as</span> <span class="kw">_</span>};
+<span class="kw">use</span> <span class="ident">spinoso_string::String</span>;
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert::BoxUnboxVmValue</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::core::TryConvertMut</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Error</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::platform_string</span>::{<span class="ident">os_str_to_bytes</span>, <span class="ident">os_string_to_bytes</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sys</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types</span>::{<span class="ident">Ruby</span>, <span class="ident">Rust</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::value::Value</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Artichoke</span>;
 
@@ -281,7 +268,9 @@
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
 
     <span class="kw">fn</span> <span class="ident">try_convert_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Value</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">try_convert_mut</span>(<span class="ident">value</span>.<span class="ident">as_slice</span>())
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::utf8</span>(<span class="ident">value</span>);
+        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">String::alloc_value</span>(<span class="ident">s</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">protect</span>(<span class="ident">value</span>))
     }
 }
 
@@ -289,14 +278,7 @@
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
 
     <span class="kw">fn</span> <span class="ident">try_convert_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Value</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="comment">// Ruby strings contain raw bytes, so we can convert from a &amp;[u8] to a</span>
-        <span class="comment">// `char *` and `size_t`.</span>
-        <span class="kw">let</span> <span class="ident">raw</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>();
-        <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">len</span>();
-        <span class="comment">// `mrb_str_new` copies the `char *` to the mruby heap so we do not have</span>
-        <span class="comment">// to worry about the lifetime of the slice passed into this converter.</span>
-        <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="self">self</span>.<span class="ident">with_ffi_boundary</span>(<span class="op">|</span><span class="ident">mrb</span><span class="op">|</span> <span class="ident">sys::mrb_str_new</span>(<span class="ident">mrb</span>, <span class="ident">raw</span>, <span class="ident">len</span>))<span class="question-mark">?</span> };
-        <span class="prelude-val">Ok</span>(<span class="ident">string</span>.<span class="ident">into</span>())
+        <span class="self">self</span>.<span class="ident">try_convert_mut</span>(<span class="ident">value</span>.<span class="ident">to_vec</span>())
     }
 }
 
@@ -349,34 +331,26 @@
 <span class="kw">impl</span> <span class="ident">TryConvertMut</span><span class="op">&lt;</span><span class="ident">Value</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Artichoke</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
 
-    <span class="kw">fn</span> <span class="ident">try_convert_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="ident">TryConvertMut</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="ident">::try_convert_mut</span>(<span class="self">self</span>, <span class="ident">value</span>).<span class="ident">map</span>(<span class="op">&lt;</span>[<span class="kw">_</span>]<span class="op">&gt;</span><span class="ident">::to_vec</span>)
+    <span class="kw">fn</span> <span class="ident">try_convert_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">value</span>: <span class="ident">Value</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">String::unbox_from_value</span>(<span class="kw-2">&amp;mut</span> <span class="ident">value</span>, <span class="self">self</span>)<span class="question-mark">?</span> };
+        <span class="prelude-val">Ok</span>(<span class="ident">s</span>.<span class="ident">clone</span>().<span class="ident">into_vec</span>())
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">TryConvertMut</span><span class="op">&lt;</span><span class="ident">Value</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Artichoke</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
 
-    <span class="kw">fn</span> <span class="ident">try_convert_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>], <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Ruby::String</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">ruby_type</span>() {
-            <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">inner</span>();
-            <span class="kw">unsafe</span> {
-                <span class="self">self</span>.<span class="ident">with_ffi_boundary</span>(<span class="op">|</span><span class="ident">mrb</span><span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">raw</span> <span class="op">=</span> <span class="ident">sys::mrb_string_value_ptr</span>(<span class="ident">mrb</span>, <span class="ident">bytes</span>).<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>();
-                    <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">sys::mrb_string_value_len</span>(<span class="ident">mrb</span>, <span class="ident">bytes</span>);
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>) <span class="op">=</span> <span class="ident">usize::try_from</span>(<span class="ident">len</span>) {
-                        <span class="comment">// We can return a borrowed slice because the memory is</span>
-                        <span class="comment">// stored on the mruby heap. As long as `value` is</span>
-                        <span class="comment">// reachable, this slice points to valid memory.</span>
-                        <span class="prelude-val">Ok</span>(<span class="ident">slice::from_raw_parts</span>(<span class="ident">raw</span>, <span class="ident">len</span>))
-                    } <span class="kw">else</span> {
-                        <span class="prelude-val">Err</span>(<span class="ident">UnboxRubyError::new</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="ident">Rust::Bytes</span>).<span class="ident">into</span>())
-                    }
-                })<span class="question-mark">?</span>
-            }
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">UnboxRubyError::new</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="ident">Rust::Bytes</span>).<span class="ident">into</span>())
-        }
+    <span class="kw">fn</span> <span class="ident">try_convert_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">value</span>: <span class="ident">Value</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>], <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">protect</span>(<span class="ident">value</span>);
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">String::unbox_from_value</span>(<span class="kw-2">&amp;mut</span> <span class="ident">value</span>, <span class="self">self</span>)<span class="question-mark">?</span> };
+        <span class="comment">// Safety</span>
+        <span class="comment">//</span>
+        <span class="comment">// This transmute modifies the lifetime of the byte slice pulled out of</span>
+        <span class="comment">// the boxed `String`. This is only safe if there are no garbage</span>
+        <span class="comment">// collections that reclaim `value`, which is enforced for at least this</span>
+        <span class="comment">// entry from an mruby trampoline by the call to `protect` above.</span>
+        <span class="kw">let</span> <span class="ident">slice</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">mem::transmute</span>(<span class="ident">s</span>.<span class="ident">as_slice</span>()) };
+        <span class="prelude-val">Ok</span>(<span class="ident">slice</span>)
     }
 }
 

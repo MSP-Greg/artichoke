@@ -638,7 +638,6 @@
 <span id="637">637</span>
 <span id="638">638</span>
 <span id="639">639</span>
-<span id="640">640</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::error</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
@@ -1225,7 +1224,6 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;core-regexp&quot;</span>)]</span>
     <span class="kw">fn</span> <span class="ident">funcall_string_split_regexp</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">interp</span> <span class="op">=</span> <span class="ident">interpreter</span>().<span class="ident">unwrap</span>();
 
@@ -1261,7 +1259,7 @@
             .<span class="ident">unwrap_err</span>();
         <span class="macro">assert_eq!</span>(<span class="string">&quot;TypeError&quot;</span>, <span class="ident">err</span>.<span class="ident">name</span>().<span class="ident">as_ref</span>());
         <span class="macro">assert_eq!</span>(
-            <span class="string">b&quot;nil cannot be converted to String&quot;</span>.<span class="ident">as_bstr</span>(),
+            <span class="string">b&quot;no implicit conversion of nil into String&quot;</span>.<span class="ident">as_bstr</span>(),
             <span class="ident">err</span>.<span class="ident">message</span>().<span class="ident">as_ref</span>().<span class="ident">as_bstr</span>()
         );
     }
