@@ -78,6 +78,7 @@
 <span id="77">77</span>
 <span id="78">78</span>
 <span id="79">79</span>
+<span id="80">80</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rubylib&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::ffi::OsStr</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
@@ -95,6 +96,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Loader</span> {
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rubylib&quot;</span>)]</span>
     <span class="ident">rubylib</span>: <span class="ident">Rubylib</span>,
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
     <span class="ident">loaded_features</span>: <span class="ident">LoadedFeatures</span>,
 }
 
