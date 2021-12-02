@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;intaglio-1.3.0&#x2F;src&#x2F;bytes.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bytes.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css"disabled><link rel="stylesheet" type="text/css" href="../../dark.css"disabled><link rel="stylesheet" type="text/css" href="../../light.css"id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;intaglio-1.4.2&#x2F;src&#x2F;bytes.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bytes.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css"disabled><link rel="stylesheet" type="text/css" href="../../dark.css"disabled><link rel="stylesheet" type="text/css" href="../../light.css"id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../intaglio/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -958,6 +958,37 @@
 <span id="957">957</span>
 <span id="958">958</span>
 <span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+<span id="980">980</span>
+<span id="981">981</span>
+<span id="982">982</span>
+<span id="983">983</span>
+<span id="984">984</span>
+<span id="985">985</span>
+<span id="986">986</span>
+<span id="987">987</span>
+<span id="988">988</span>
+<span id="989">989</span>
+<span id="990">990</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Intern arbitrary bytes.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This module provides a nearly identical API to the one found in the</span>
@@ -966,7 +997,7 @@
 <span class="doccomment">//! 1. Interned contents are `&amp;[u8]` instead of `&amp;str`. Additionally, `Vec&lt;u8&gt;`</span>
 <span class="doccomment">//!    is used where `String` would have been used.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! # Example: intern bytestring</span>
+<span class="doccomment">//! # Example: intern byte string</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//! # use intaglio::bytes::SymbolTable;</span>
@@ -1115,7 +1146,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">FusedIterator</span> <span class="kw">for</span> <span class="ident">AllSymbols</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {}
 
-<span class="doccomment">/// An iterator over all interned bytestrings in a [`SymbolTable`].</span>
+<span class="doccomment">/// An iterator over all interned byte strings in a [`SymbolTable`].</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// See the [`bytestrings`](SymbolTable::bytestrings) method in [`SymbolTable`].</span>
 <span class="doccomment">///</span>
@@ -1189,7 +1220,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">FusedIterator</span> <span class="kw">for</span> <span class="ident">Bytestrings</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {}
 
-<span class="doccomment">/// An iterator over all symbols and interned bytestrings in a [`SymbolTable`].</span>
+<span class="doccomment">/// An iterator over all symbols and interned byte strings in a [`SymbolTable`].</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// See the [`iter`](SymbolTable::iter) method in [`SymbolTable`].</span>
 <span class="doccomment">///</span>
@@ -1255,7 +1286,7 @@
 
 <span class="doccomment">/// Byte string interner.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This symbol table is implemented by storing bytestrings with a fast path for</span>
+<span class="doccomment">/// This symbol table is implemented by storing byte strings with a fast path for</span>
 <span class="doccomment">/// `&amp;[u8]` that are already `&#39;static`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// See module documentation for more.</span>
@@ -1300,8 +1331,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">SymbolTable</span><span class="op">&lt;</span><span class="ident">RandomState</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Constructs a new, empty `SymbolTable` with</span>
-    <span class="doccomment">/// [default capacity](DEFAULT_SYMBOL_TABLE_CAPACITY).</span>
+    <span class="doccomment">/// Constructs a new, empty `SymbolTable` with [default capacity].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This function will always allocate. To construct a symbol table without</span>
+    <span class="doccomment">/// allocating, call [`SymbolTable::with_capacity(0)`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -1311,6 +1344,9 @@
     <span class="doccomment">/// assert_eq!(0, table.len());</span>
     <span class="doccomment">/// assert!(table.capacity() &gt;= 4096);</span>
     <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [default capacity]: DEFAULT_SYMBOL_TABLE_CAPACITY</span>
+    <span class="doccomment">/// [`SymbolTable::with_capacity(0)`]: Self::with_capacity</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::with_capacity</span>(<span class="ident">DEFAULT_SYMBOL_TABLE_CAPACITY</span>)
@@ -1318,7 +1354,7 @@
 
     <span class="doccomment">/// Constructs a new, empty `SymbolTable` with the specified capacity.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The symbol table will be able to hold at least `capacity` bytestrings</span>
+    <span class="doccomment">/// The symbol table will be able to hold at least `capacity` byte strings</span>
     <span class="doccomment">/// without reallocating. If `capacity` is 0, the symbol table will not</span>
     <span class="doccomment">/// allocate.</span>
     <span class="doccomment">///</span>
@@ -1379,7 +1415,7 @@
         }
     }
 
-    <span class="doccomment">/// Returns the number of bytestrings the table can hold without</span>
+    <span class="doccomment">/// Returns the number of byte strings the table can hold without</span>
     <span class="doccomment">/// reallocating.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
@@ -1393,7 +1429,7 @@
         <span class="ident">usize::min</span>(<span class="self">self</span>.<span class="ident">vec</span>.<span class="ident">capacity</span>(), <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">capacity</span>())
     }
 
-    <span class="doccomment">/// Returns the number of interned bytestrings in the table.</span>
+    <span class="doccomment">/// Returns the number of interned byte strings in the table.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -1404,7 +1440,7 @@
     <span class="doccomment">/// assert_eq!(0, table.len());</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// table.intern(b&quot;abc&quot;.to_vec())?;</span>
-    <span class="doccomment">/// // only uniquely interned bytestrings grow the symbol table.</span>
+    <span class="doccomment">/// // only uniquely interned byte strings grow the symbol table.</span>
     <span class="doccomment">/// table.intern(b&quot;abc&quot;.to_vec())?;</span>
     <span class="doccomment">/// table.intern(b&quot;xyz&quot;.to_vec())?;</span>
     <span class="doccomment">/// assert_eq!(2, table.len());</span>
@@ -1416,7 +1452,7 @@
         <span class="self">self</span>.<span class="ident">vec</span>.<span class="ident">len</span>()
     }
 
-    <span class="doccomment">/// Returns `true` if the symbol table contains no interned bytestrings.</span>
+    <span class="doccomment">/// Returns `true` if the symbol table contains no interned byte strings.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -1488,7 +1524,7 @@
         <span class="prelude-val">Some</span>(<span class="ident">bytes</span>.<span class="ident">as_slice</span>())
     }
 
-    <span class="doccomment">/// Returns an iterator over all [`Symbol`]s and bytestrings in the</span>
+    <span class="doccomment">/// Returns an iterator over all [`Symbol`]s and byte strings in the</span>
     <span class="doccomment">/// [`SymbolTable`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
@@ -1588,7 +1624,7 @@
         }
     }
 
-    <span class="doccomment">/// Returns an iterator over all bytestrings in the [`SymbolTable`].</span>
+    <span class="doccomment">/// Returns an iterator over all byte strings in the [`SymbolTable`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -1634,10 +1670,10 @@
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">BuildHasher</span>,
 {
-    <span class="doccomment">/// Intern a bytestring for the lifetime of the symbol table.</span>
+    <span class="doccomment">/// Intern a byte string for the lifetime of the symbol table.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The returned `Symbol` allows retrieving of the underlying bytes.</span>
-    <span class="doccomment">/// Equal bytestrings will be inserted into the symbol table exactly once.</span>
+    <span class="doccomment">/// Equal byte strings will be inserted into the symbol table exactly once.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function only allocates if the underlying symbol table has no</span>
     <span class="doccomment">/// remaining capacity.</span>
@@ -1645,7 +1681,7 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If the symbol table would grow larger than `u32::MAX` interned</span>
-    <span class="doccomment">/// bytestrings, the [`Symbol`] counter would overflow and a</span>
+    <span class="doccomment">/// byte strings, the [`Symbol`] counter would overflow and a</span>
     <span class="doccomment">/// [`SymbolOverflowError`] is returned.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
@@ -1665,7 +1701,6 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// # example().unwrap();</span>
     <span class="doccomment">/// ```</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span> <span class="comment">// clippy in 1.51.0 gives a false positive on `debug_assert!`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">intern</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">contents</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Symbol</span>, <span class="ident">SymbolOverflowError</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -1806,6 +1841,33 @@
         <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">shrink_to_fit</span>();
         <span class="self">self</span>.<span class="ident">vec</span>.<span class="ident">shrink_to_fit</span>();
     }
+
+    <span class="doccomment">/// Shrinks the capacity of the symbol table with a lower bound.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The capacity will remain at least as large as both the length and the</span>
+    <span class="doccomment">/// supplied value.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the current capacity is less than the lower limit, this is a no-op.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// # use intaglio::bytes::SymbolTable;</span>
+    <span class="doccomment">/// # fn example() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {</span>
+    <span class="doccomment">/// let mut table = SymbolTable::with_capacity(10);</span>
+    <span class="doccomment">/// table.intern(b&quot;abc&quot;.to_vec())?;</span>
+    <span class="doccomment">/// table.intern(b&quot;xyz&quot;.to_vec())?;</span>
+    <span class="doccomment">/// table.intern(b&quot;123&quot;.to_vec())?;</span>
+    <span class="doccomment">/// table.shrink_to(5);</span>
+    <span class="doccomment">/// assert!(table.capacity() &gt;= 5);</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// # example().unwrap();</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shrink_to</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">min_capacity</span>: <span class="ident">usize</span>) {
+        <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">shrink_to</span>(<span class="ident">min_capacity</span>);
+        <span class="self">self</span>.<span class="ident">vec</span>.<span class="ident">shrink_to</span>(<span class="ident">min_capacity</span>);
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -1905,13 +1967,13 @@
     }
 
     <span class="attribute">#[<span class="ident">quickcheck</span>]</span>
-    <span class="kw">fn</span> <span class="ident">empty_table_does_not_report_any_interned_bytestrings</span>(<span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">empty_table_does_not_report_any_interned_byte_strings</span>(<span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">table</span> <span class="op">=</span> <span class="ident">SymbolTable::new</span>();
         <span class="op">!</span><span class="ident">table</span>.<span class="ident">is_interned</span>(<span class="ident">bytes</span>.<span class="ident">as_slice</span>())
     }
 
     <span class="attribute">#[<span class="ident">quickcheck</span>]</span>
-    <span class="kw">fn</span> <span class="ident">table_reports_interned_bytestrings_as_interned</span>(<span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">table_reports_interned_byte_strings_as_interned</span>(<span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">table</span> <span class="op">=</span> <span class="ident">SymbolTable::new</span>();
         <span class="ident">table</span>.<span class="ident">intern</span>(<span class="ident">bytes</span>.<span class="ident">clone</span>()).<span class="ident">unwrap</span>();
         <span class="ident">table</span>.<span class="ident">is_interned</span>(<span class="ident">bytes</span>.<span class="ident">as_slice</span>())
