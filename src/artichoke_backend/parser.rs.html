@@ -103,23 +103,7 @@
 <span id="102">102</span>
 <span id="103">103</span>
 <span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-</pre><pre class="rust"><code><span class="comment">// This `allow` pragma suppresses false positives.</span>
-<span class="comment">//</span>
-<span class="comment">// See:</span>
-<span class="comment">//</span>
-<span class="comment">// - https://github.com/rust-lang/rust-clippy/issues/6141</span>
-<span class="comment">// - https://github.com/rust-lang/rust-clippy/issues/6563</span>
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::shadow_unrelated</span>)]</span>
-
-<span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::core</span>::{<span class="ident">ClassRegistry</span>, <span class="ident">IncrementLinenoError</span>, <span class="ident">Parser</span>, <span class="ident">TryConvertMut</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error</span>::{<span class="ident">Error</span>, <span class="ident">RubyException</span>};

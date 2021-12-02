@@ -3535,12 +3535,9 @@
 <span id="3534">3534</span>
 <span id="3535">3535</span>
 <span id="3536">3536</span>
-<span id="3537">3537</span>
-<span id="3538">3538</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::pedantic</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::cargo</span>)]</span>
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::option_if_let_else</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">allow</span>(<span class="ident">clippy::non_ascii_literal</span>))]</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">unknown_lints</span>)]</span>
 <span class="comment">// TODO: warn on missing docs once crate is API-complete.</span>
@@ -6492,7 +6489,6 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::shadow_unrelated</span>)]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::invisible_characters</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">alloc::string::ToString</span>;

@@ -209,23 +209,7 @@
 <span id="208">208</span>
 <span id="209">209</span>
 <span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-</pre><pre class="rust"><code><span class="comment">// This `allow` pragma suppresses false positives.</span>
-<span class="comment">//</span>
-<span class="comment">// See:</span>
-<span class="comment">//</span>
-<span class="comment">// - https://github.com/rust-lang/rust-clippy/issues/6141</span>
-<span class="comment">// - https://github.com/rust-lang/rust-clippy/issues/6563</span>
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::shadow_unrelated</span>)]</span>
-
-<span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>};
 <span class="kw">use</span> <span class="ident">std::ptr::NonNull</span>;
 
