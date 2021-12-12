@@ -352,14 +352,12 @@
 <span id="351">351</span>
 <span id="352">352</span>
 <span id="353">353</span>
-<span id="354">354</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::ffi::c_void</span>;
-<span class="kw">use</span> <span class="ident">std::fmt::Write</span>;
+<span class="kw">use</span> <span class="ident">std::fmt::Write</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert</span>::{<span class="ident">implicitly_convert_to_int</span>, <span class="ident">implicitly_convert_to_string</span>, <span class="ident">UnboxedValueGuard</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::extn::prelude</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::io::IoError</span>;
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">args</span>;
 <span class="kw">mod</span> <span class="ident">ffi</span>;
@@ -486,10 +484,10 @@
                 }
             }
             <span class="ident">Ruby::Fixnum</span> =&gt; {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String::new</span>();
                 <span class="kw">let</span> <span class="ident">int</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">sys::mrb_sys_fixnum_to_cint</span>(<span class="ident">value</span>.<span class="ident">inner</span>()) };
-                <span class="ident">itoa::write</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf</span>, <span class="ident">int</span>).<span class="ident">map_err</span>(<span class="ident">IoError::from</span>)<span class="question-mark">?</span>;
-                <span class="ident">out</span>.<span class="ident">push</span>(<span class="ident">buf</span>);
+                <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">int</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
+                <span class="ident">out</span>.<span class="ident">push</span>(<span class="ident">buf</span>.<span class="ident">into_bytes</span>());
             }
             <span class="ident">Ruby::Float</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">float</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">sys::mrb_sys_float_to_cdouble</span>(<span class="ident">value</span>.<span class="ident">inner</span>()) };

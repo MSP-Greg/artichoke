@@ -171,7 +171,7 @@
             <span class="ident">Ruby::Bool</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;false&quot;</span>),
             <span class="ident">Ruby::Fixnum</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">fixnum</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">mrb_sys_fixnum_to_cint</span>(<span class="kw-2">*</span><span class="self">self</span>) };
-                <span class="ident">itoa::fmt</span>(<span class="ident">f</span>, <span class="ident">fixnum</span>)
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">fixnum</span>)
             }
             <span class="ident">Ruby::Float</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">float</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">mrb_sys_float_to_cdouble</span>(<span class="kw-2">*</span><span class="self">self</span>) };

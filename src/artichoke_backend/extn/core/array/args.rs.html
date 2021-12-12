@@ -138,13 +138,9 @@
 <span id="137">137</span>
 <span id="138">138</span>
 <span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert::implicitly_convert_to_int</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Write</span> <span class="kw">as</span> <span class="kw">_</span>;
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert::implicitly_convert_to_int</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::extn::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sys::protect</span>;
 
@@ -205,10 +201,9 @@
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">start</span>) <span class="op">=</span> <span class="ident">pos</span> {
                 <span class="ident">start</span>
             } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;index &quot;</span>);
-                <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">start</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
-                <span class="ident">message</span>.<span class="ident">push_str</span>(<span class="string">&quot; too small for array; minimum: -&quot;</span>);
-                <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">len</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;index {} too small for array; minimum: -{}&quot;</span>, <span class="ident">start</span>, <span class="ident">len</span>)
+                    .<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">IndexError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>());
             }
         };
@@ -216,9 +211,8 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">slice_len</span>) <span class="op">=</span> <span class="ident">usize::try_from</span>(<span class="ident">slice_len</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">start</span>, <span class="prelude-val">Some</span>(<span class="ident">slice_len</span>), <span class="ident">elem</span>))
         } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;negative length (&quot;</span>);
-            <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">slice_len</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
-            <span class="ident">message</span>.<span class="ident">push</span>(<span class="string">&#39;)&#39;</span>);
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
+            <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;negative length ({})&quot;</span>, <span class="ident">slice_len</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
             <span class="prelude-val">Err</span>(<span class="ident">IndexError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>())
         }
     } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">index</span>) <span class="op">=</span> <span class="ident">implicitly_convert_to_int</span>(<span class="ident">interp</span>, <span class="ident">first</span>) {
@@ -232,10 +226,9 @@
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">idx</span>) <span class="op">=</span> <span class="ident">idx</span> {
                 <span class="prelude-val">Ok</span>((<span class="ident">idx</span>, <span class="prelude-val">None</span>, <span class="ident">second</span>))
             } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;index &quot;</span>);
-                <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">index</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
-                <span class="ident">message</span>.<span class="ident">push_str</span>(<span class="string">&quot; too small for array; minimum: -&quot;</span>);
-                <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">len</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;index {} too small for array; minimum: -{}&quot;</span>, <span class="ident">index</span>, <span class="ident">len</span>)
+                    .<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
                 <span class="prelude-val">Err</span>(<span class="ident">IndexError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>())
             }
         }
@@ -254,10 +247,7 @@
             <span class="comment">// TODO: This conditional is probably not doing the right thing</span>
             <span class="kw">if</span> <span class="ident">start</span> <span class="op">+</span> (<span class="ident">end</span> <span class="op">-</span> <span class="ident">start</span>) <span class="op">&lt;</span> <span class="number">0</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
-                <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">start</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
-                <span class="ident">message</span>.<span class="ident">push_str</span>(<span class="string">&quot;..&quot;</span>);
-                <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">end</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
-                <span class="ident">message</span>.<span class="ident">push_str</span>(<span class="string">&quot; out of range&quot;</span>);
+                <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;{}..{} out of range&quot;</span>, <span class="ident">start</span>, <span class="ident">end</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RangeError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>());
             }
             <span class="kw">match</span> (<span class="ident">usize::try_from</span>(<span class="ident">start</span>), <span class="ident">usize::try_from</span>(<span class="ident">end</span>)) {
@@ -270,19 +260,17 @@
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">start</span>) <span class="op">=</span> <span class="ident">pos</span> {
                         <span class="prelude-val">Ok</span>((<span class="ident">start</span>, <span class="ident">end</span>.<span class="ident">checked_sub</span>(<span class="ident">start</span>), <span class="ident">second</span>))
                     } <span class="kw">else</span> {
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;index &quot;</span>);
-                        <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">start</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
-                        <span class="ident">message</span>.<span class="ident">push_str</span>(<span class="string">&quot; too small for array; minimum: -&quot;</span>);
-                        <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">len</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                        <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;index {} too small for array; minimum: -{}&quot;</span>, <span class="ident">start</span>, <span class="ident">len</span>)
+                            .<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
                         <span class="prelude-val">Err</span>(<span class="ident">IndexError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>())
                     }
                 }
                 (<span class="prelude-val">Ok</span>(<span class="ident">start</span>), <span class="prelude-val">Err</span>(<span class="kw">_</span>)) =&gt; <span class="prelude-val">Ok</span>((<span class="ident">start</span>, <span class="prelude-val">None</span>, <span class="ident">second</span>)),
                 (<span class="prelude-val">Err</span>(<span class="kw">_</span>), <span class="prelude-val">Err</span>(<span class="kw">_</span>)) =&gt; {
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;index &quot;</span>);
-                    <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">start</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
-                    <span class="ident">message</span>.<span class="ident">push_str</span>(<span class="string">&quot; too small for array; minimum: -&quot;</span>);
-                    <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">len</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                    <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;index {} too small for array; minimum: -{}&quot;</span>, <span class="ident">start</span>, <span class="ident">len</span>)
+                        .<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
                     <span class="prelude-val">Err</span>(<span class="ident">IndexError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>())
                 }
             }

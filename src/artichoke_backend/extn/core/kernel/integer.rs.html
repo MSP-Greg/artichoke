@@ -598,7 +598,7 @@
 <span id="597">597</span>
 <span id="598">598</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::error</span>;
-<span class="kw">use</span> <span class="ident">std::fmt</span>;
+<span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span>};
 <span class="kw">use</span> <span class="ident">std::iter::Iterator</span>;
 <span class="kw">use</span> <span class="ident">std::num::NonZeroU32</span>;
 <span class="kw">use</span> <span class="ident">std::str</span>::{<span class="self">self</span>, <span class="ident">FromStr</span>};
@@ -676,8 +676,8 @@
                     <span class="prelude-val">Ok</span>(<span class="number">1</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">Radix::default</span>())),
                     <span class="prelude-val">Ok</span>(<span class="ident">radix</span>) =&gt; <span class="ident">radix</span>,
                     <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;invalid radix &quot;</span>);
-                        <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">num</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                        <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;invalid radix {}&quot;</span>, <span class="ident">num</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
                         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ArgumentError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>());
                     }
                 }
@@ -688,8 +688,8 @@
                 <span class="comment">// of numeric literal prefixes.</span>
                 <span class="prelude-val">None</span> <span class="kw">if</span> <span class="ident">radix</span> <span class="op">==</span> <span class="number">0</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
                 <span class="prelude-val">None</span> =&gt; {
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;invalid radix &quot;</span>);
-                    <span class="ident">itoa::fmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="ident">radix</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                    <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">message</span>, <span class="string">&quot;invalid radix {}&quot;</span>, <span class="ident">radix</span>).<span class="ident">map_err</span>(<span class="ident">WriteError::from</span>)<span class="question-mark">?</span>;
                     <span class="prelude-val">Err</span>(<span class="ident">ArgumentError::from</span>(<span class="ident">message</span>).<span class="ident">into</span>())
                 }
             }
