@@ -3586,9 +3586,6 @@
 <span id="3585">3585</span>
 <span id="3586">3586</span>
 <span id="3587">3587</span>
-<span id="3588">3588</span>
-<span id="3589">3589</span>
-<span id="3590">3590</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::pedantic</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::cargo</span>)]</span>
@@ -3630,7 +3627,7 @@
 <span class="kw">use</span> <span class="ident">core::fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 <span class="kw">use</span> <span class="ident">core::hash</span>::{<span class="ident">Hash</span>, <span class="ident">Hasher</span>};
 <span class="kw">use</span> <span class="ident">core::iter</span>::{<span class="ident">Cycle</span>, <span class="ident">Take</span>};
-<span class="kw">use</span> <span class="ident">core::mem</span>::{<span class="self">self</span>, <span class="ident">ManuallyDrop</span>};
+<span class="kw">use</span> <span class="ident">core::mem</span>;
 <span class="kw">use</span> <span class="ident">core::ops::Range</span>;
 <span class="kw">use</span> <span class="ident">core::slice</span>::{<span class="self">self</span>, <span class="ident">SliceIndex</span>};
 <span class="kw">use</span> <span class="ident">core::str</span>;
@@ -3640,6 +3637,8 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;casecmp&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;docsrs&quot;</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;casecmp&quot;</span>)))]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">focaccia::CaseFold</span>;
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">inline</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">raw_parts::RawParts</span>;
 
 <span class="kw">mod</span> <span class="ident">chars</span>;
 <span class="kw">mod</span> <span class="ident">codepoints</span>;
@@ -4591,8 +4590,8 @@
     <span class="doccomment">/// to by the pointer at will. Ensure that nothing else uses the pointer</span>
     <span class="doccomment">/// after calling this function.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_raw_parts</span>(<span class="ident">ptr</span>: <span class="kw-2">*mut</span> <span class="ident">u8</span>, <span class="ident">length</span>: <span class="ident">usize</span>, <span class="ident">capacity</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::utf8</span>(<span class="ident">Vec::from_raw_parts</span>(<span class="ident">ptr</span>, <span class="ident">length</span>, <span class="ident">capacity</span>))
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_raw_parts</span>(<span class="ident">raw_parts</span>: <span class="ident">RawParts</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::utf8</span>(<span class="ident">RawParts::into_vec</span>(<span class="ident">raw_parts</span>))
     }
 
     <span class="doccomment">/// Decomposes a `String` into its raw components.</span>
@@ -4610,13 +4609,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`from_raw_parts`]: String::from_raw_parts</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_raw_parts</span>(<span class="self">self</span>) -&gt; (<span class="kw-2">*mut</span> <span class="ident">u8</span>, <span class="ident">usize</span>, <span class="ident">usize</span>) {
-        <span class="comment">// TODO: convert to `Vec::into_raw_parts` once it is stabilized.</span>
-        <span class="comment">// See: https://doc.rust-lang.org/1.48.0/src/alloc/vec.rs.html#399-402</span>
-        <span class="comment">//</span>
-        <span class="comment">// https://github.com/rust-lang/rust/issues/65816</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">me</span> <span class="op">=</span> <span class="ident">ManuallyDrop::new</span>(<span class="self">self</span>.<span class="ident">buf</span>);
-        (<span class="ident">me</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">me</span>.<span class="ident">len</span>(), <span class="ident">me</span>.<span class="ident">capacity</span>())
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_raw_parts</span>(<span class="self">self</span>) -&gt; <span class="ident">RawParts</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+        <span class="ident">RawParts::from_vec</span>(<span class="self">self</span>.<span class="ident">buf</span>)
     }
 
     <span class="doccomment">/// Converts self into a vector without clones or allocation.</span>

@@ -156,13 +156,17 @@
 <span id="155">155</span>
 <span id="156">156</span>
 <span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">core::ops::Deref</span>;
 <span class="kw">use</span> <span class="ident">std::ffi::c_void</span>;
 
 <span class="kw">use</span> <span class="ident">artichoke_core::value::Value</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">spinoso_exception::TypeError</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">inline</span>)]</span>
-<span class="kw">use</span> <span class="ident">spinoso_string</span>::{<span class="ident">Encoding</span>, <span class="ident">String</span>};
+<span class="kw">use</span> <span class="ident">spinoso_string</span>::{<span class="ident">Encoding</span>, <span class="ident">RawParts</span>, <span class="ident">String</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert</span>::{<span class="ident">BoxUnboxVmValue</span>, <span class="ident">UnboxedValueGuard</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Error</span>;
@@ -207,7 +211,7 @@
         <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="ident">sys::mrb_sys_basic_ptr</span>(<span class="ident">value</span>).<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">sys::RString</span><span class="op">&gt;</span>();
 
         <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">ptr</span>;
-        <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>;
+        <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="kw">let</span> <span class="ident">capacity</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">aux</span>.<span class="ident">capa</span> <span class="kw">as</span> <span class="ident">usize</span>;
 
         <span class="comment">// the encoding flag is 4 bits wide.</span>
@@ -216,7 +220,11 @@
         <span class="kw">let</span> <span class="ident">encoding</span> <span class="op">=</span> (<span class="ident">encoding_flag</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">ENCODING_FLAG_BITPOS</span>) <span class="kw">as</span> <span class="ident">u8</span>;
         <span class="kw">let</span> <span class="ident">encoding</span> <span class="op">=</span> <span class="ident">Encoding::try_from_flag</span>(<span class="ident">encoding</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">TypeError::with_message</span>(<span class="string">&quot;Unknown encoding&quot;</span>))<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::from_raw_parts</span>(<span class="ident">ptr</span>.<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(), <span class="ident">len</span>, <span class="ident">capacity</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::from_raw_parts</span>(<span class="ident">RawParts</span> {
+            <span class="ident">ptr</span>: <span class="ident">ptr</span>.<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(),
+            <span class="ident">length</span>,
+            <span class="ident">capacity</span>,
+        });
         <span class="ident">s</span>.<span class="ident">set_encoding</span>(<span class="ident">encoding</span>);
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">UnboxedValueGuard::new</span>(<span class="ident">s</span>);
 
@@ -225,10 +233,10 @@
 
     <span class="kw">fn</span> <span class="ident">alloc_value</span>(<span class="ident">value</span>: <span class="ident"><span class="self">Self</span>::Unboxed</span>, <span class="ident">interp</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Artichoke</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Value</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">encoding</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">encoding</span>();
-        <span class="kw">let</span> (<span class="ident">ptr</span>, <span class="ident">len</span>, <span class="ident">capacity</span>) <span class="op">=</span> <span class="ident">String::into_raw_parts</span>(<span class="ident">value</span>);
+        <span class="kw">let</span> <span class="ident">RawParts</span> { <span class="ident">ptr</span>, <span class="ident">length</span>, <span class="ident">capacity</span> } <span class="op">=</span> <span class="ident">String::into_raw_parts</span>(<span class="ident">value</span>);
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="kw">unsafe</span> {
             <span class="ident">interp</span>.<span class="ident">with_ffi_boundary</span>(<span class="op">|</span><span class="ident">mrb</span><span class="op">|</span> {
-                <span class="ident">sys::mrb_sys_alloc_rstring</span>(<span class="ident">mrb</span>, <span class="ident">ptr</span>.<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>(), <span class="ident">len</span> <span class="kw">as</span> <span class="ident">sys::mrb_int</span>, <span class="ident">capacity</span> <span class="kw">as</span> <span class="ident">sys::mrb_int</span>)
+                <span class="ident">sys::mrb_sys_alloc_rstring</span>(<span class="ident">mrb</span>, <span class="ident">ptr</span>.<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>(), <span class="ident">length</span> <span class="kw">as</span> <span class="ident">sys::mrb_int</span>, <span class="ident">capacity</span> <span class="kw">as</span> <span class="ident">sys::mrb_int</span>)
             })<span class="question-mark">?</span>
         };
         <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">sys::mrb_sys_basic_ptr</span>(<span class="ident">value</span>).<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">sys::RString</span><span class="op">&gt;</span>() };
@@ -252,11 +260,11 @@
         }
 
         <span class="kw">let</span> <span class="ident">encoding</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">encoding</span>();
-        <span class="kw">let</span> (<span class="ident">ptr</span>, <span class="ident">len</span>, <span class="ident">capacity</span>) <span class="op">=</span> <span class="ident">String::into_raw_parts</span>(<span class="ident">value</span>);
+        <span class="kw">let</span> <span class="ident">RawParts</span> { <span class="ident">ptr</span>, <span class="ident">length</span>, <span class="ident">capacity</span> } <span class="op">=</span> <span class="ident">String::into_raw_parts</span>(<span class="ident">value</span>);
         <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="kw">unsafe</span> {
             <span class="ident">sys::mrb_sys_repack_into_rstring</span>(
                 <span class="ident">ptr</span>.<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>(),
-                <span class="ident">len</span> <span class="kw">as</span> <span class="ident">sys::mrb_int</span>,
+                <span class="ident">length</span> <span class="kw">as</span> <span class="ident">sys::mrb_int</span>,
                 <span class="ident">capacity</span> <span class="kw">as</span> <span class="ident">sys::mrb_int</span>,
                 <span class="ident">into</span>.<span class="ident">inner</span>(),
             )

@@ -572,6 +572,11 @@
 <span id="571">571</span>
 <span id="572">572</span>
 <span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">core::char</span>;
 <span class="kw">use</span> <span class="ident">core::convert::TryFrom</span>;
 <span class="kw">use</span> <span class="ident">core::hash</span>::{<span class="ident">BuildHasher</span>, <span class="ident">Hash</span>, <span class="ident">Hasher</span>};
@@ -586,7 +591,7 @@
 <span class="kw">use</span> <span class="ident">artichoke_core::hash::Hash</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">bstr::ByteSlice</span>;
 <span class="kw">use</span> <span class="ident">spinoso_exception::ArgumentError</span>;
-<span class="kw">use</span> <span class="ident">spinoso_string::String</span>;
+<span class="kw">use</span> <span class="ident">spinoso_string</span>::{<span class="ident">RawParts</span>, <span class="ident">String</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert::BoxUnboxVmValue</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error</span>;
@@ -1137,13 +1142,18 @@
     <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">mrb</span>;
 
     <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">ptr</span>;
-    <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>;
+    <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>;
     <span class="kw">let</span> <span class="ident">capacity</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">string</span>).<span class="ident">as_</span>.<span class="ident">heap</span>.<span class="ident">aux</span>.<span class="ident">capa</span> <span class="kw">as</span> <span class="ident">usize</span>;
 
     <span class="comment">// we don&#39;t need to free the encoding since `Encoding` is `Copy` and we pack</span>
     <span class="comment">// it into the `RString` flags as a `u32`.</span>
 
-    <span class="ident">drop</span>(<span class="ident">String::from_raw_parts</span>(<span class="ident">ptr</span>.<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(), <span class="ident">len</span>, <span class="ident">capacity</span>));
+    <span class="kw">let</span> <span class="ident">raw_parts</span> <span class="op">=</span> <span class="ident">RawParts</span> {
+        <span class="ident">ptr</span>: <span class="ident">ptr</span>.<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(),
+        <span class="ident">length</span>,
+        <span class="ident">capacity</span>,
+    };
+    <span class="ident">drop</span>(<span class="ident">String::from_raw_parts</span>(<span class="ident">raw_parts</span>));
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="artichoke_backend" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6bda5b331 2021-12-12)" ></div>
