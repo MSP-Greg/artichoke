@@ -623,10 +623,33 @@
 <span id="622">622</span>
 <span id="623">623</span>
 <span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::error</span>;
 <span class="kw">use</span> <span class="ident">std::ffi</span>::{<span class="ident">c_void</span>, <span class="ident">CStr</span>};
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
+<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="self">self</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span>};
 <span class="kw">use</span> <span class="ident">std::ptr::NonNull</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::class</span>;
@@ -642,30 +665,51 @@
 <span class="doccomment">/// `tt` [`MRB_TT_DATA`](sys::mrb_vtype::MRB_TT_DATA).</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Free</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">data</span>: <span class="kw-2">*mut</span> <span class="ident">c_void</span>);
 
-<span class="doccomment">/// A generic implementation of a [`Free`] function for</span>
-<span class="doccomment">/// [`mrb_value`](sys::mrb_value)s that store an owned copy of a [`Box`] smart</span>
-<span class="doccomment">/// pointer.</span>
+<span class="doccomment">/// A generic implementation of a [`Free`] function for [`mrb_value`]s that</span>
+<span class="doccomment">/// store an owned copy of a [`Box`] smart pointer.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This function ultimately calls [`Box::from_raw`] on the data pointer and</span>
 <span class="doccomment">/// drops the resulting [`Box`].</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Safety</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// The given `data` pointer must be non-null and allocated by [`Box`].</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// This function assumes that the data pointer is to an [`Box`]`&lt;T&gt;` created by</span>
 <span class="doccomment">/// [`Box::into_raw`]. This function bounds `T` by [`BoxUnboxVmValue`] which</span>
 <span class="doccomment">/// boxes `T` for the mruby VM like this.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This function assumes it is called by the mruby VM as a free function for</span>
-<span class="doccomment">/// an [`MRB_TT_DATA`](sys::mrb_vtype::MRB_TT_DATA).</span>
+<span class="doccomment">/// This function assumes it is called by the mruby VM as a free function for an</span>
+<span class="doccomment">/// [`MRB_TT_DATA`].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`mrb_value`]: sys::mrb_value</span>
+<span class="doccomment">/// [`MRB_TT_DATA`]: sys::mrb_vtype::MRB_TT_DATA</span>
 <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">box_unbox_free</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">_mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">data</span>: <span class="kw-2">*mut</span> <span class="ident">c_void</span>)
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">BoxUnboxVmValue</span>,
 {
-    <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">is_null</span>() {
-        <span class="macro">error!</span>(<span class="string">&quot;Received null pointer in box_unbox_free&lt;{}&gt;: {:p}&quot;</span>, <span class="ident">T::RUBY_TYPE</span>, <span class="ident">data</span>);
-        <span class="macro">eprintln!</span>(<span class="string">&quot;Received null pointer in box_unbox_free&lt;{}&gt;: {:p}&quot;</span>, <span class="ident">T::RUBY_TYPE</span>, <span class="ident">data</span>);
+    <span class="comment">// Ideally we&#39;d be able to have the `data` argument in the function signature</span>
+    <span class="comment">// declared as `Option&lt;NonNull&lt;c_void&gt;&gt;` which is FFI safe, but this function</span>
+    <span class="comment">// is eventually passed into a bindgen-generated mruby struct, which expects</span>
+    <span class="comment">// the `*mut c_void` argument.</span>
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="ident">NonNull::new</span>(<span class="ident">data</span>) {
+        <span class="comment">// Only attempt to free if we are given a non-null pointer.</span>
+        <span class="ident">T::free</span>(<span class="ident">data</span>.<span class="ident">as_ptr</span>());
+    } <span class="kw">else</span> {
+        <span class="comment">// If we enter this branch, we have almost certainly encountered a bug.</span>
+        <span class="comment">// Rather than attempt a free and virtually guaranteed segfault, log</span>
+        <span class="comment">// loudly and short-circuit; a leak is better than a crash.</span>
+        <span class="comment">//</span>
+        <span class="comment">// `box_unbox_free::&lt;T&gt;` is only ever called in an FFI context when</span>
+        <span class="comment">// there are C frames in the stack. Using `eprintln!` or unwrapping the</span>
+        <span class="comment">// error from `write!` here is UB and may result in an abort. Instead,</span>
+        <span class="comment">// suppress the error.</span>
+        <span class="kw">let</span> <span class="ident">_ignored</span> <span class="op">=</span> <span class="macro">write!</span>(
+            <span class="ident">io::stderr</span>(),
+            <span class="string">&quot;Received null pointer in box_unbox_free::&lt;{}&gt;&quot;</span>,
+            <span class="ident">T::RUBY_TYPE</span>,
+        );
     }
-    <span class="ident">T::free</span>(<span class="ident">data</span>);
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -1248,5 +1292,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="artichoke_backend" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (928783de6 2021-12-11)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="artichoke_backend" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (6bda5b331 2021-12-12)" ></div>
 </body></html>
