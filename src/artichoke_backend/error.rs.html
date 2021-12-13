@@ -154,10 +154,6 @@
 <span id="153">153</span>
 <span id="154">154</span>
 <span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::error</span>;
 <span class="kw">use</span> <span class="ident">std::ffi::CStr</span>;
@@ -262,11 +258,7 @@
     <span class="ident">drop</span>(<span class="ident">exception</span>);
 
     <span class="comment">// `mrb_sys_raise` will call longjmp which will unwind the stack.</span>
-    <span class="ident">sys::mrb_sys_raise</span>(
-        <span class="ident">mrb</span>,
-        <span class="ident">RUNTIME_ERROR_CSTR</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>(),
-        <span class="ident">UNABLE_TO_RAISE_MESSAGE</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>(),
-    );
+    <span class="ident">sys::mrb_sys_raise</span>(<span class="ident">mrb</span>, <span class="ident">RUNTIME_ERROR_CSTR</span>.<span class="ident">as_ptr</span>(), <span class="ident">UNABLE_TO_RAISE_MESSAGE</span>.<span class="ident">as_ptr</span>());
 
     <span class="comment">// Safety:</span>
     <span class="comment">//</span>
