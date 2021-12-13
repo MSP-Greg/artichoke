@@ -236,6 +236,13 @@
 <span id="235">235</span>
 <span id="236">236</span>
 <span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
 </pre><pre class="rust"><code><span class="doccomment">//! A registry for [class specs](Spec) that uses types as keys.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This data structure is used for associating data type metadata with a Rust</span>
@@ -455,6 +462,13 @@
     <span class="doccomment">/// frequent reallocations.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reserve</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">additional</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">reserve</span>(<span class="ident">additional</span>);
+    }
+
+    <span class="doccomment">/// Tries to reserve capacity for at least additional more elements to be</span>
+    <span class="doccomment">/// inserted in the `Registry`. The collection may reserve more space to</span>
+    <span class="doccomment">/// avoid frequent reallocations.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_reserve</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">additional</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">std::collections::TryReserveError</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">try_reserve</span>(<span class="ident">additional</span>)
     }
 
     <span class="doccomment">/// Shrinks the capacity of the map as much as possible. It will drop down</span>

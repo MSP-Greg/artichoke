@@ -3535,6 +3535,60 @@
 <span id="3534">3534</span>
 <span id="3535">3535</span>
 <span id="3536">3536</span>
+<span id="3537">3537</span>
+<span id="3538">3538</span>
+<span id="3539">3539</span>
+<span id="3540">3540</span>
+<span id="3541">3541</span>
+<span id="3542">3542</span>
+<span id="3543">3543</span>
+<span id="3544">3544</span>
+<span id="3545">3545</span>
+<span id="3546">3546</span>
+<span id="3547">3547</span>
+<span id="3548">3548</span>
+<span id="3549">3549</span>
+<span id="3550">3550</span>
+<span id="3551">3551</span>
+<span id="3552">3552</span>
+<span id="3553">3553</span>
+<span id="3554">3554</span>
+<span id="3555">3555</span>
+<span id="3556">3556</span>
+<span id="3557">3557</span>
+<span id="3558">3558</span>
+<span id="3559">3559</span>
+<span id="3560">3560</span>
+<span id="3561">3561</span>
+<span id="3562">3562</span>
+<span id="3563">3563</span>
+<span id="3564">3564</span>
+<span id="3565">3565</span>
+<span id="3566">3566</span>
+<span id="3567">3567</span>
+<span id="3568">3568</span>
+<span id="3569">3569</span>
+<span id="3570">3570</span>
+<span id="3571">3571</span>
+<span id="3572">3572</span>
+<span id="3573">3573</span>
+<span id="3574">3574</span>
+<span id="3575">3575</span>
+<span id="3576">3576</span>
+<span id="3577">3577</span>
+<span id="3578">3578</span>
+<span id="3579">3579</span>
+<span id="3580">3580</span>
+<span id="3581">3581</span>
+<span id="3582">3582</span>
+<span id="3583">3583</span>
+<span id="3584">3584</span>
+<span id="3585">3585</span>
+<span id="3586">3586</span>
+<span id="3587">3587</span>
+<span id="3588">3588</span>
+<span id="3589">3589</span>
+<span id="3590">3590</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::pedantic</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::cargo</span>)]</span>
@@ -4786,6 +4840,31 @@
         <span class="self">self</span>.<span class="ident">buf</span>.<span class="ident">reserve</span>(<span class="ident">additional</span>);
     }
 
+    <span class="doccomment">/// Tries to reserve capacity for at least `additional` more elements to be</span>
+    <span class="doccomment">/// inserted in the `String`. The collection may reserve more space</span>
+    <span class="doccomment">/// to avoid frequent reallocations.</span>
+    <span class="doccomment">/// After calling `try_reserve`, capacity will be greater than or equal to</span>
+    <span class="doccomment">/// `self.len() + additional`.</span>
+    <span class="doccomment">/// Does nothing if capacity is already sufficient.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Errors</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the capacity overflows, or the allocator reports a failure, then an</span>
+    <span class="doccomment">/// error is returned.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use spinoso_string::String;</span>
+    <span class="doccomment">/// let mut str = String::from(&quot;x&quot;);</span>
+    <span class="doccomment">/// str.try_reserve(10).expect(&quot;why is this OOMing?&quot;);</span>
+    <span class="doccomment">/// assert!(str.capacity() &gt;= 11);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_reserve</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">additional</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">alloc::collections::TryReserveError</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">buf</span>.<span class="ident">try_reserve</span>(<span class="ident">additional</span>)
+    }
+
     <span class="doccomment">/// Reserves the minimum capacity for exactly `additional` more bytes to be</span>
     <span class="doccomment">/// inserted in the given `String`. After calling `reserve_exact`, capacity</span>
     <span class="doccomment">/// will be greater than or equal to `self.len() + additional`. Does nothing</span>
@@ -4811,6 +4890,35 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reserve_exact</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">additional</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">buf</span>.<span class="ident">reserve_exact</span>(<span class="ident">additional</span>);
+    }
+
+    <span class="doccomment">/// Tries to reserve the minimum capacity for exactly `additional`</span>
+    <span class="doccomment">/// elements to be inserted in the `String`.</span>
+    <span class="doccomment">/// After calling `try_reserve_exact`, capacity will be greater</span>
+    <span class="doccomment">/// than or equal to `self.len() + additional` if it returns Ok(()).</span>
+    <span class="doccomment">/// Does nothing if the capacity is already sufficient.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that the allocator may give the collection more space than</span>
+    <span class="doccomment">/// it requests. Therefore, capacity can not be relied upon to be</span>
+    <span class="doccomment">/// precisely minimal.</span>
+    <span class="doccomment">/// Prefer `reserve` if future insertions are expected.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Errors</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the capacity overflows, or the allocator reports a failure, then an</span>
+    <span class="doccomment">/// error is returned.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use spinoso_string::String;</span>
+    <span class="doccomment">/// let mut str = String::from(&quot;x&quot;);</span>
+    <span class="doccomment">/// str.try_reserve_exact(10).expect(&quot;why is this OOMing?&quot;);</span>
+    <span class="doccomment">/// assert!(str.capacity() &gt;= 11);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_reserve_exact</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">additional</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">alloc::collections::TryReserveError</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">buf</span>.<span class="ident">try_reserve_exact</span>(<span class="ident">additional</span>)
     }
 
     <span class="doccomment">/// Shrinks the capacity of the vector as much as possible.</span>

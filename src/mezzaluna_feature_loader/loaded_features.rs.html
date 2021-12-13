@@ -504,6 +504,33 @@
 <span id="503">503</span>
 <span id="504">504</span>
 <span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
 </pre><pre class="rust"><code><span class="doccomment">//! A set of loaded Ruby source files based on a [`Vec`] and [`HashSet`].</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This module exposes an append-only, insertion order-preserving, set-like</span>
@@ -864,6 +891,33 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reserve</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">additional</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">reserve</span>(<span class="ident">additional</span>);
         <span class="self">self</span>.<span class="ident">paths</span>.<span class="ident">reserve</span>(<span class="ident">additional</span>);
+    }
+
+    <span class="doccomment">/// Tries to reserve capacity for at least `additional` more elements to be</span>
+    <span class="doccomment">/// inserted in the `LoadedFeatures`. The collection may reserve more space</span>
+    <span class="doccomment">/// to avoid frequent reallocations.</span>
+    <span class="doccomment">/// After calling `try_reserve`, capacity will be greater than or equal to</span>
+    <span class="doccomment">/// `self.len() + additional`.</span>
+    <span class="doccomment">/// Does nothing if capacity is already sufficient.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Errors</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the capacity overflows, or the allocator reports a failure, then an</span>
+    <span class="doccomment">/// error is returned.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use mezzaluna_feature_loader::LoadedFeatures;</span>
+    <span class="doccomment">/// let mut features = LoadedFeatures::new();</span>
+    <span class="doccomment">/// features.try_reserve(10).expect(&quot;why is this OOMing on 10 bytes?&quot;);</span>
+    <span class="doccomment">/// assert!(features.capacity() &gt;= 10);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_reserve</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">additional</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">std::collections::TryReserveError</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">features</span>.<span class="ident">try_reserve</span>(<span class="ident">additional</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">paths</span>.<span class="ident">try_reserve</span>(<span class="ident">additional</span>)<span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="doccomment">/// Shrinks the capacity of the set as much as possible. It will drop down</span>
