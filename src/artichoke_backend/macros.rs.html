@@ -312,10 +312,50 @@
 <span id="311">311</span>
 <span id="312">312</span>
 <span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
 </pre><pre class="rust"><code><span class="comment">// This module defines macros for working with interpreters and `Value`s. This</span>
 <span class="comment">// source module is included first in `lib.rs`, which means the macros are</span>
 <span class="comment">// available to all modules within the artichoke-backend crate in addition to</span>
 <span class="comment">// being exported.</span>
+
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules!</span> <span class="ident">emit_fatal_warning</span> {
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">tt</span>)<span class="op">+</span>) =&gt; {{
+        <span class="kw">use</span> <span class="ident">::std::io::Write</span>;
+
+        <span class="comment">// Something bad, terrible, and unexpected has happened.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Suppress errors from logging to stderr because this function may being</span>
+        <span class="comment">// called when there are foreign C frames in the stack and panics are</span>
+        <span class="comment">// either UB or will result in an abort.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Ensure the returned error is dropped so we don&#39;t leave anything on</span>
+        <span class="comment">// the stack in the event of a foreign unwind.</span>
+        <span class="kw">let</span> <span class="ident">maybe_err</span> <span class="op">=</span> <span class="macro">::std::write!</span>(<span class="ident">::std::io::stderr</span>(), <span class="string">&quot;fatal[artichoke-backend]: &quot;</span>);
+        <span class="ident">drop</span>(<span class="ident">maybe_err</span>);
+        <span class="kw">let</span> <span class="ident">maybe_err</span> <span class="op">=</span> <span class="macro">::std::writeln!</span>(<span class="ident">::std::io::stderr</span>(), $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>)<span class="op">+</span>);
+        <span class="ident">drop</span>(<span class="ident">maybe_err</span>);
+    }};
+}
 
 <span class="doccomment">/// Extract an [`Artichoke`] instance from the userdata on a [`sys::mrb_state`].</span>
 <span class="doccomment">///</span>

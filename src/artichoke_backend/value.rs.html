@@ -787,7 +787,7 @@
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Fatal::from</span>(<span class="string">&quot;Value receiver for function call is dead. This indicates a bug in the mruby garbage collector. Please leave a comment at https://github.com/artichoke/artichoke/issues/1336.&quot;</span>).<span class="ident">into</span>());
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">arg_count_error</span>) <span class="op">=</span> <span class="ident">ArgCountError::try_from</span>(<span class="ident">args</span>) {
-            <span class="macro">warn!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">arg_count_error</span>);
+            <span class="macro">emit_fatal_warning!</span>(<span class="string">&quot;Value::funcall invoked with too many arguments: {}&quot;</span>, <span class="ident">arg_count_error</span>);
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">arg_count_error</span>.<span class="ident">into</span>());
         }
         <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">args</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::inner</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();

@@ -317,6 +317,7 @@
 <span id="316">316</span>
 <span id="317">317</span>
 <span id="318">318</span>
+<span id="319">319</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::slice</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::extn::core::array</span>::{<span class="ident">Array</span>, <span class="ident">RawParts</span>};
@@ -443,8 +444,9 @@
             <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">array</span>.<span class="ident">take</span>();
             <span class="ident">Array::box_into_value</span>(<span class="ident">inner</span>, <span class="ident">ary</span>.<span class="ident">into</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">guard</span>).<span class="ident">expect</span>(<span class="string">&quot;Array reboxing should not fail&quot;</span>);
         } <span class="kw">else</span> {
-            <span class="macro">warn!</span>(
-                <span class="string">&quot;Attempted to call mrb_ary_concat with a {:?} argument&quot;</span>,
+            <span class="macro">emit_fatal_warning!</span>(
+                <span class="string">&quot;ffi: mrb_ary_concat: Expected {:?} argument but got {:?} argument&quot;</span>,
+                <span class="ident">Ruby::Array</span>,
                 <span class="ident">other</span>.<span class="ident">ruby_type</span>()
             );
         }
