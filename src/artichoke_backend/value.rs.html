@@ -631,13 +631,6 @@
 <span id="630">630</span>
 <span id="631">631</span>
 <span id="632">632</span>
-<span id="633">633</span>
-<span id="634">634</span>
-<span id="635">635</span>
-<span id="636">636</span>
-<span id="637">637</span>
-<span id="638">638</span>
-<span id="639">639</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 <span class="kw">use</span> <span class="ident">std::error</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
@@ -791,13 +784,6 @@
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">arg_count_error</span>.<span class="ident">into</span>());
         }
         <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">args</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::inner</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="macro">trace!</span>(
-            <span class="string">&quot;Calling {}#{} with {} args{}&quot;</span>,
-            <span class="self">self</span>.<span class="ident">ruby_type</span>(),
-            <span class="ident">func</span>,
-            <span class="ident">args</span>.<span class="ident">len</span>(),
-            <span class="kw">if</span> <span class="ident">block</span>.<span class="ident">is_some</span>() { <span class="string">&quot; and block&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;&quot;</span> }
-        );
         <span class="kw">let</span> <span class="ident">func</span> <span class="op">=</span> <span class="ident">interp</span>.<span class="ident">intern_string</span>(<span class="ident">func</span>.<span class="ident">to_string</span>())<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> {
             <span class="ident">interp</span>.<span class="ident">with_ffi_boundary</span>(<span class="op">|</span><span class="ident">mrb</span><span class="op">|</span> {
