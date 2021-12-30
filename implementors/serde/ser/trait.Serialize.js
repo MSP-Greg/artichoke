@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["test_utils"] = [{"text":"impl <a class=\"trait\" href=\"serde/ser/trait.Serialize.html\" title=\"trait serde::ser::Serialize\">Serialize</a> for <a class=\"struct\" href=\"test_utils/struct.CommandOutput.html\" title=\"struct test_utils::CommandOutput\">CommandOutput</a>","synthetic":false,"types":["test_utils::CommandOutput"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
