@@ -586,7 +586,7 @@
 <span class="kw">use</span> <span class="ident">core::str</span>;
 <span class="kw">use</span> <span class="ident">std::ffi</span>::{<span class="ident">c_void</span>, <span class="ident">CStr</span>};
 <span class="kw">use</span> <span class="ident">std::io::Write</span> <span class="kw">as</span> <span class="kw">_</span>;
-<span class="kw">use</span> <span class="ident">std::os::raw</span>::{<span class="ident">c_double</span>, <span class="ident">c_int</span>};
+<span class="kw">use</span> <span class="ident">std::os::raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_double</span>, <span class="ident">c_int</span>};
 
 <span class="kw">use</span> <span class="ident">artichoke_core::convert::Convert</span>;
 <span class="kw">use</span> <span class="ident">artichoke_core::hash::Hash</span> <span class="kw">as</span> <span class="kw">_</span>;
@@ -613,7 +613,7 @@
 
 <span class="comment">// MRB_API mrb_value mrb_str_new(mrb_state *mrb, const char *p, size_t len)</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_new</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">p</span>: <span class="kw-2">*const</span> <span class="ident">i8</span>, <span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">sys::mrb_value</span> {
+<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_new</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">p</span>: <span class="kw-2">*const</span> <span class="ident">c_char</span>, <span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">sys::mrb_value</span> {
     <span class="macro">unwrap_interpreter!</span>(<span class="ident">mrb</span>, <span class="ident">to</span> =&gt; <span class="ident">guard</span>);
     <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">p</span>.<span class="ident">is_null</span>() {
         <span class="ident">String::utf8</span>(<span class="macro">vec!</span>[<span class="number">0</span>; <span class="ident">len</span>])
@@ -631,7 +631,7 @@
 
 <span class="comment">// MRB_API mrb_value mrb_str_new_cstr(mrb_state *mrb, const char *p)</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_new_cstr</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">p</span>: <span class="kw-2">*const</span> <span class="ident">i8</span>) -&gt; <span class="ident">sys::mrb_value</span> {
+<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_new_cstr</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">p</span>: <span class="kw-2">*const</span> <span class="ident">c_char</span>) -&gt; <span class="ident">sys::mrb_value</span> {
     <span class="macro">unwrap_interpreter!</span>(<span class="ident">mrb</span>, <span class="ident">to</span> =&gt; <span class="ident">guard</span>);
     <span class="kw">let</span> <span class="ident">cstr</span> <span class="op">=</span> <span class="ident">CStr::from_ptr</span>(<span class="ident">p</span>);
     <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">cstr</span>.<span class="ident">to_bytes</span>().<span class="ident">to_vec</span>();
@@ -645,7 +645,7 @@
 
 <span class="comment">// MRB_API mrb_value mrb_str_new_static(mrb_state *mrb, const char *p, size_t len)</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_new_static</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">p</span>: <span class="kw-2">*const</span> <span class="ident">i8</span>, <span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">sys::mrb_value</span> {
+<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_new_static</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">p</span>: <span class="kw-2">*const</span> <span class="ident">c_char</span>, <span class="ident">len</span>: <span class="ident">usize</span>) -&gt; <span class="ident">sys::mrb_value</span> {
     <span class="comment">// Artichoke doesn&#39;t have a static string optimization.</span>
     <span class="ident">mrb_str_new</span>(<span class="ident">mrb</span>, <span class="ident">p</span>, <span class="ident">len</span>)
 }
@@ -655,7 +655,7 @@
 <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_index</span>(
     <span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>,
     <span class="ident">s</span>: <span class="ident">sys::mrb_value</span>,
-    <span class="ident">sptr</span>: <span class="kw-2">*const</span> <span class="ident">i8</span>,
+    <span class="ident">sptr</span>: <span class="kw-2">*const</span> <span class="ident">c_char</span>,
     <span class="ident">slen</span>: <span class="ident">sys::mrb_int</span>,
     <span class="ident">offset</span>: <span class="ident">sys::mrb_int</span>,
 ) -&gt; <span class="ident">sys::mrb_int</span> {
@@ -915,12 +915,12 @@
 <span class="comment">//</span>
 <span class="comment">// obsolete: use RSTRING_CSTR() or mrb_string_cstr()</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_string_value_cstr</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">ptr</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_value</span>) -&gt; <span class="kw-2">*const</span> <span class="ident">i8</span> {
+<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_string_value_cstr</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">ptr</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_value</span>) -&gt; <span class="kw-2">*const</span> <span class="ident">c_char</span> {
     <span class="macro">unwrap_interpreter!</span>(<span class="ident">mrb</span>, <span class="ident">to</span> =&gt; <span class="ident">guard</span>, <span class="ident">or_else</span> <span class="op">=</span> <span class="ident">ptr::null</span>());
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Value::from</span>(<span class="kw-2">*</span><span class="ident">ptr</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">string</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">string</span>) <span class="op">=</span> <span class="ident">String::unbox_from_value</span>(<span class="kw-2">&amp;mut</span> <span class="ident">s</span>, <span class="kw-2">&amp;mut</span> <span class="ident">guard</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">b&#39;\0&#39;</span>) <span class="op">=</span> <span class="ident">string</span>.<span class="ident">last</span>() {
-            <span class="kw">return</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>();
+            <span class="kw">return</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>();
         }
         <span class="ident">string</span>
     } <span class="kw">else</span> {
@@ -936,7 +936,7 @@
     <span class="comment">//</span>
     <span class="comment">// This raw pointer will not be invalidated since we rebox this `String`</span>
     <span class="comment">// into the mruby heap where the GC will keep it alive.</span>
-    <span class="kw">let</span> <span class="ident">cstr</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>();
+    <span class="kw">let</span> <span class="ident">cstr</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">c_char</span><span class="op">&gt;</span>();
 
     <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">take</span>();
     <span class="ident">String::box_into_value</span>(<span class="ident">inner</span>, <span class="ident">s</span>, <span class="kw-2">&amp;mut</span> <span class="ident">guard</span>).<span class="ident">expect</span>(<span class="string">&quot;String reboxing should not fail&quot;</span>);
@@ -946,12 +946,12 @@
 
 <span class="comment">// MRB_API const char* mrb_string_cstr(mrb_state *mrb, mrb_value str)</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_string_cstr</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">s</span>: <span class="ident">sys::mrb_value</span>) -&gt; <span class="kw-2">*const</span> <span class="ident">i8</span> {
+<span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_string_cstr</span>(<span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>, <span class="ident">s</span>: <span class="ident">sys::mrb_value</span>) -&gt; <span class="kw-2">*const</span> <span class="ident">c_char</span> {
     <span class="macro">unwrap_interpreter!</span>(<span class="ident">mrb</span>, <span class="ident">to</span> =&gt; <span class="ident">guard</span>, <span class="ident">or_else</span> <span class="op">=</span> <span class="ident">ptr::null</span>());
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Value::from</span>(<span class="ident">s</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">string</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">string</span>) <span class="op">=</span> <span class="ident">String::unbox_from_value</span>(<span class="kw-2">&amp;mut</span> <span class="ident">s</span>, <span class="kw-2">&amp;mut</span> <span class="ident">guard</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">b&#39;\0&#39;</span>) <span class="op">=</span> <span class="ident">string</span>.<span class="ident">last</span>() {
-            <span class="kw">return</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>();
+            <span class="kw">return</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>();
         }
         <span class="ident">string</span>
     } <span class="kw">else</span> {
@@ -967,7 +967,7 @@
     <span class="comment">//</span>
     <span class="comment">// This raw pointer will not be invalidated since we rebox this `String`</span>
     <span class="comment">// into the mruby heap where the GC will keep it alive.</span>
-    <span class="kw">let</span> <span class="ident">cstr</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>();
+    <span class="kw">let</span> <span class="ident">cstr</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">c_char</span><span class="op">&gt;</span>();
 
     <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">take</span>();
     <span class="ident">String::box_into_value</span>(<span class="ident">inner</span>, <span class="ident">s</span>, <span class="kw-2">&amp;mut</span> <span class="ident">guard</span>).<span class="ident">expect</span>(<span class="string">&quot;String reboxing should not fail&quot;</span>);
@@ -1079,7 +1079,7 @@
 <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">mrb_str_cat</span>(
     <span class="ident">mrb</span>: <span class="kw-2">*mut</span> <span class="ident">sys::mrb_state</span>,
     <span class="ident">s</span>: <span class="ident">sys::mrb_value</span>,
-    <span class="ident">ptr</span>: <span class="kw-2">*const</span> <span class="ident">i8</span>,
+    <span class="ident">ptr</span>: <span class="kw-2">*const</span> <span class="ident">c_char</span>,
     <span class="ident">len</span>: <span class="ident">usize</span>,
 ) -&gt; <span class="ident">sys::mrb_value</span> {
     <span class="macro">unwrap_interpreter!</span>(<span class="ident">mrb</span>, <span class="ident">to</span> =&gt; <span class="ident">guard</span>, <span class="ident">or_else</span> <span class="op">=</span> <span class="ident">s</span>);
@@ -1157,5 +1157,5 @@
     <span class="ident">drop</span>(<span class="ident">String::from_raw_parts</span>(<span class="ident">raw_parts</span>));
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="artichoke_backend" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f3238f89 2022-01-02)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="artichoke_backend" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (7d6f94817 2022-01-04)" ></div>
 </body></html>

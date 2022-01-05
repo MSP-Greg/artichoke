@@ -219,12 +219,14 @@
 <span id="217">217</span>
 <span id="218">218</span>
 <span id="219">219</span>
+<span id="220">220</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Detect if Ruby code parses successfully.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The REPL needs to check if code is valid to determine whether it should</span>
 <span class="doccomment">//! enter multiline editing mode.</span>
 
 <span class="kw">use</span> <span class="ident">std::ffi::CStr</span>;
+<span class="kw">use</span> <span class="ident">std::os::raw::c_char</span>;
 <span class="kw">use</span> <span class="ident">std::ptr::NonNull</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::backend::sys</span>;
@@ -354,7 +356,7 @@
         <span class="kw">let</span> <span class="ident">parser</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="self">self</span>.<span class="ident">parser</span>.<span class="ident">as_mut</span>() };
         <span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="self">self</span>.<span class="ident">context</span>.<span class="ident">as_mut</span>() };
 
-        <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">code</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>();
+        <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">code</span>.<span class="ident">as_ptr</span>().<span class="ident">cast</span>::<span class="op">&lt;</span><span class="ident">c_char</span><span class="op">&gt;</span>();
         <span class="ident">parser</span>.<span class="ident">s</span> <span class="op">=</span> <span class="ident">ptr</span>;
         <span class="ident">parser</span>.<span class="ident">send</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ptr</span>.<span class="ident">offset</span>(<span class="ident">len</span>) };
         <span class="ident">parser</span>.<span class="ident">lineno</span> <span class="op">=</span> <span class="ident">context</span>.<span class="ident">lineno</span>;
@@ -439,5 +441,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="artichoke" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (8f3238f89 2022-01-02)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="artichoke" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (7d6f94817 2022-01-04)" ></div>
 </body></html>
